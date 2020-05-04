@@ -1,0 +1,14 @@
+﻿Branch 1 : Thymeleaf and CRUD In-memory Service
+Branch 2 : Use Hibernate Validator
+Branch 3 : Connect to DB (JDBC Template)
+Branch 4 : trans to JPA
+Branch 5 : Spring Security
+
+
+App : 
+ - Student
+ - Classroom
+ - Teacher
+
+After :
+ - Subject

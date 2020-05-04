@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title)">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title th:text="${title} ?: _">Jungtin Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{'/vendor/bootstrap/css/bootstrap.min.css'}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link th:href="@{'https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700'}"
+          rel="stylesheet">
+    <link th:href="@{'https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i'}"
+          rel="stylesheet">
+    <link th:href="@{'/vendor/fontawesome-free/css/all.min.css'}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{'/css/resume.min.css'}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <span class="d-block d-lg-none">Clarence Taylor</span>
+        <span class="d-none d-lg-block">
+        <img class="img-fluid img-profile rounded-circle mx-auto mb-2"
+             th:src="@{'/img/profile.jpg'}" alt="">
+      </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="#student">Student</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid p-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
+        <div class="w-100">
+            <h1 class="mb-0">JungTin
+                <span class="text-primary">Nguyen</span>
+            </h1>
+            <div class="subheading mb-5">SOFTWARE ENGINEER ·
+                <a href="mailto:name@email.com">name@email.com</a>
+            </div>
+            <p class="lead mb-5">Welcome to the page of Nguyen Trung Thinh</p>
+        </div>
+    </section>
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="student">
+        <div class="w-100">
+            <h2 class="mb-5">Student</h2>
+
+            <div>
+                <div>
+                    <a th:href="@{/student/create}" class="btn btn-outline-success">Create new
+                        student</a>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Birthdate</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="student : ${students}">
+                        <th scope="row" th:text="${student.id}" class="student-id"></th>
+                        <td th:text="${student.name}" class="student-name">Mark</td>
+                        <td th:text="${student.getBirthdateStr()}">Otto</td>
+                        <td>
+                            <a th:href="@{|/student/${student.id}/update|}" class="btn btn-sm btn-warning">Update</a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger activeModal">Delete</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                    </button>
+                    <a id="del-btn" class="btn btn-primary">Accept</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:fragment="script">
+    <!-- Bootstrap core JavaScript -->
+    <script th:src="@{'/vendor/jquery/jquery.min.js'}"></script>
+    <script th:src="@{'/vendor/bootstrap/js/bootstrap.bundle.min.js'}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script th:src="@{'/vendor/jquery-easing/jquery.easing.min.js'}"></script>
+
+    <!-- Custom scripts for this template -->
+    <script th:src="@{'/js/resume.min.js'}"></script>
+
+    <script>
+      $(".activeModal").on("click", function () {
+            $('#deleteModal').modal('show');
+            var studentId = $(this).parent().siblings(".student-id").text();
+            var studentName = $(this).parent().siblings(".student-name").text();
+
+            $(".modal-body p").text("Do you really want to delete Student(id : " + studentId + ", name : " + studentName + ")");
+            $("#del-btn").attr("href", "/student/" + studentId + "/delete");
+      })
+    </script>
+</th:block>
+
+</body>
+
+</html>
