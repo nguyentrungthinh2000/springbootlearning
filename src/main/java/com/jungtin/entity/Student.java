@@ -5,7 +5,9 @@ import java.time.format.DateTimeFormatter;
 
 public class Student {
     private Long id;
+    
     private String name;
+    
     private LocalDate birthdate;
     
     public Student() {
@@ -16,9 +18,10 @@ public class Student {
         this.birthdate = birthdate;
     }
     
-    public Student(String name, String birthdate) {
-        this.name = name;
-        this.birthdate = LocalDate.parse(birthdate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    public Student(StudentForm form) {
+        this.id = form.getId();
+        this.name = form.getName();
+        this.birthdate = LocalDate.parse(form.getBirthdate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
     
     public Long getId() {
@@ -41,16 +44,8 @@ public class Student {
         return birthdate;
     }
     
-    public String getBirthdateStr() {
-        return birthdate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    }
-    
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
-    }
-    
-    public void setBirthdate(String birthdate) {
-        this.birthdate = LocalDate.parse(birthdate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
     
     @Override

@@ -1,6 +1,8 @@
 package com.jungtin.service;
 
 import com.jungtin.entity.Student;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,10 +16,12 @@ public class StudentService {
     
     static {
         StudentService service = new StudentService();
-        service.saveOrUpdate(new Student("Trung Thinh", "22/03/2000"));
-        service.saveOrUpdate(new Student("Hoang Tien", "05/03/2000"));
-        service.saveOrUpdate(new Student("Hieu Trung", "07/03/2000"));
-        service.saveOrUpdate(new Student("Lam Hoang", "14/03/2000"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        service.saveOrUpdate(new Student("Trung Thinh", LocalDate.parse("22/03/2000", formatter)));
+        service.saveOrUpdate(new Student("Hoang Tien", LocalDate.parse("05/03/2000", formatter)));
+        service.saveOrUpdate(new Student("Hieu Trung", LocalDate.parse("07/03/2000", formatter)));
+        service.saveOrUpdate(new Student("Lam Hoang", LocalDate.parse("14/03/2000", formatter)));
     }
     
     public StudentService() { }

@@ -26,7 +26,6 @@
 </head>
 
 <body id="page-top">
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
     <a class="navbar-brand js-scroll-trigger" href="#page-top">
         <span class="d-block d-lg-none">Clarence Taylor</span>
@@ -43,7 +42,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link js-scroll-trigger" href="#about">About</a>
+                <a class="nav-link js-scroll-trigger" href="#about" th>About</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link js-scroll-trigger" href="#student">Student</a>
@@ -91,7 +90,7 @@
                     <tr th:each="student : ${students}">
                         <th scope="row" th:text="${student.id}" class="student-id"></th>
                         <td th:text="${student.name}" class="student-name">Mark</td>
-                        <td th:text="${student.getBirthdateStr()}">Otto</td>
+                        <td th:text="${#temporals.format(student.birthdate, 'dd/MM/yyyy')}">Otto</td>
                         <td>
                             <a th:href="@{|/student/${student.id}/update|}" class="btn btn-sm btn-warning">Update</a>
                         </td>
