@@ -13,6 +13,12 @@ public class Student {
     public Student() {
     }
     
+    public Student(Long id, String name, LocalDate birthdate) {
+        this.id = id;
+        this.name = name;
+        this.birthdate = birthdate;
+    }
+    
     public Student(String name, LocalDate birthdate) {
         this.name = name;
         this.birthdate = birthdate;

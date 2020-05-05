@@ -1,48 +1,80 @@
 package com.jungtin.service;
 
 import com.jungtin.entity.Student;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StudentService {
     
-    private static HashMap<Long, Student> students = new HashMap<>();
-    private Long lastId = 0L;
+    @Autowired
+    private DataSource dataSource;
     
-    static {
-        StudentService service = new StudentService();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        
-        service.saveOrUpdate(new Student("Trung Thinh", LocalDate.parse("22/03/2000", formatter)));
-        service.saveOrUpdate(new Student("Hoang Tien", LocalDate.parse("05/03/2000", formatter)));
-        service.saveOrUpdate(new Student("Hieu Trung", LocalDate.parse("07/03/2000", formatter)));
-        service.saveOrUpdate(new Student("Lam Hoang", LocalDate.parse("14/03/2000", formatter)));
-    }
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
     
     public StudentService() { }
     
     public List<Student> getStudents() {
-        return new ArrayList<>(students.values());
+        List<Student> students = jdbcTemplate
+            .query("SELECT * FROM STUDENT", new RowMapper<Student>() {
+                @Override
+                public Student mapRow(ResultSet rs, int i) throws SQLException {
+                    Student temp = new Student(
+                        rs.getLong(1),
+                        rs.getString(2),
+                        rs.getDate(3).toLocalDate()
+                    );
+                    return temp;
+                }
+            });
+        return students;
     }
     
     public Student saveOrUpdate(Student student) {
-        if(student.getId() == null)
-            student.setId(++lastId);
-        
-        students.put(student.getId(), student);
+        SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource)
+            .withTableName("STUDENT")
+            .usingGeneratedKeyColumns("ID");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("ID", student.getId());
+        params.put("NAME", student.getName());
+        params.put("BIRTHDATE", student.getBirthdate());
+
+        Number returnedId = insert.executeAndReturnKey(params);
+        student.setId((long) returnedId);
+    
         return student;
     }
     
     public boolean delete(Long id) {
-        return students.remove(id) != null;
+        int result = jdbcTemplate.update("DELETE FROM STUDENT WHERE ID = ?", id);
+        return result > 0;
     }
     
     public Student getStudentById(Long id) {
-        return students.get(id);
+        Student student = jdbcTemplate
+            .queryForObject("SELECT * FROM STUDENT WHERE ID = ?", new Object[]{id},
+                new RowMapper<Student>() {
+                    @Override
+                    public Student mapRow(ResultSet rs, int i) throws SQLException {
+                        Student temp = new Student(
+                            rs.getLong(1),
+                            rs.getString(2),
+                            rs.getDate(3).toLocalDate()
+                        );
+                        return temp;
+                    }
+                });
+        return student;
     }
 }
