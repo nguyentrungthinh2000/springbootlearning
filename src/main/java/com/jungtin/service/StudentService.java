@@ -1,6 +1,7 @@
 package com.jungtin.service;
 
 import com.jungtin.entity.Student;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class StudentService {
         params.put("BIRTHDATE", student.getBirthdate());
 
         Number returnedId = insert.executeAndReturnKey(params);
-        student.setId((long) returnedId);
+        student.setId(returnedId.longValue());
     
         return student;
     }
@@ -76,5 +77,18 @@ public class StudentService {
                     }
                 });
         return student;
+    }
+    
+    public void checkConnection() {
+        try {
+            final Connection connection = dataSource.getConnection();
+            if (connection == null) {
+                System.out.println("no connection");
+            } else {
+                System.out.println("yes connection");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
