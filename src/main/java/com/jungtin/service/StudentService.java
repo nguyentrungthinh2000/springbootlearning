@@ -1,7 +1,6 @@
 package com.jungtin.service;
 
 import com.jungtin.entity.Student;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -42,17 +41,30 @@ public class StudentService {
     }
     
     public Student saveOrUpdate(Student student) {
-        SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource)
-            .withTableName("STUDENT")
-            .usingGeneratedKeyColumns("ID");
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("ID", student.getId());
-        params.put("NAME", student.getName());
-        params.put("BIRTHDATE", student.getBirthdate());
-
-        Number returnedId = insert.executeAndReturnKey(params);
-        student.setId(returnedId.longValue());
+        if(student.getId() == null) {
+            /*
+            *   INSERT
+            * */
+            SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource)
+                .withTableName("STUDENT")
+                .usingGeneratedKeyColumns("ID");
+    
+            Map<String, Object> params = new HashMap<>();
+            params.put("ID", student.getId());
+            params.put("NAME", student.getName());
+            params.put("BIRTHDATE", student.getBirthdate());
+    
+            Number returnedId = insert.executeAndReturnKey(params);
+            student.setId(returnedId.longValue());
+        } else {
+            /*
+            *   UPDATE
+            * */
+            jdbcTemplate.update("UPDATE student SET name = ?, birthdate = ? WHERE id = ?"
+                , student.getName()
+                , student.getBirthdate()
+                , student.getId());
+        }
     
         return student;
     }
@@ -77,18 +89,5 @@ public class StudentService {
                     }
                 });
         return student;
-    }
-    
-    public void checkConnection() {
-        try {
-            final Connection connection = dataSource.getConnection();
-            if (connection == null) {
-                System.out.println("no connection");
-            } else {
-                System.out.println("yes connection");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

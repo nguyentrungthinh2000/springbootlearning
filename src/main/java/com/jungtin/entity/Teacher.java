@@ -1,23 +1,31 @@
 package com.jungtin.entity;
 
-import java.time.LocalDate;
+import com.jungtin.entity.form.TeacherForm;
 
 public class Teacher {
     private Long id;
     private String name;
-    private LocalDate birthdate;
     private SUBJECT subject;
     
     public Teacher() {
     }
     
-    public Teacher(Long id, String name, LocalDate birthdate, SUBJECT subject) {
-        this.id = id;
+    public Teacher(String name, SUBJECT subject) {
         this.name = name;
-        this.birthdate = birthdate;
         this.subject = subject;
     }
     
+    public Teacher(Long id, String name, SUBJECT subject) {
+        this.id = id;
+        this.name = name;
+        this.subject = subject;
+    }
+    
+    public Teacher(TeacherForm form) {
+        this.id = form.getId();
+        this.name = form.getName();
+        this.subject = form.getSubject();
+    }
     
     public Long getId() {
         return id;
@@ -35,19 +43,19 @@ public class Teacher {
         this.name = name;
     }
     
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-    
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
-    }
-    
     public SUBJECT getSubject() {
         return subject;
     }
     
     public void setSubject(SUBJECT subject) {
         this.subject = subject;
+    }
+    
+    @Override
+    public String toString() {
+        return "Teacher{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            '}';
     }
 }

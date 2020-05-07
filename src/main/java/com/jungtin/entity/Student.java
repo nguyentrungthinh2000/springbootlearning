@@ -1,5 +1,6 @@
 package com.jungtin.entity;
 
+import com.jungtin.entity.form.StudentForm;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -52,14 +53,5 @@ public class Student {
     
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
-    }
-    
-    @Override
-    public String toString() {
-        return "Student{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", birthdate=" + birthdate +
-            '}';
     }
 }

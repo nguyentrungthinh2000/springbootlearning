@@ -1,9 +1,9 @@
 package com.jungtin.controller;
 
 
-import com.jungtin.entity.Student;
-import com.jungtin.entity.form.StudentForm;
-import com.jungtin.service.StudentService;
+import com.jungtin.entity.Teacher;
+import com.jungtin.entity.form.TeacherForm;
+import com.jungtin.service.TeacherService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,39 +16,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/student")
-public class StudentController {
+@RequestMapping("teacher")
+public class TeacherController {
     
     @Autowired
-    private StudentService studentService;
+    private TeacherService teacherService;
     
     @GetMapping("/create")
-    public String showStudentForm(Model model) {
-        model.addAttribute("student", new StudentForm());
-        return "student/form";
+    public String showTeacherForm(Model model) {
+        model.addAttribute("teacher", new TeacherForm());
+        return "teacher/form";
     }
     
     @PostMapping("/submit")
-    public String processForm(@Valid @ModelAttribute("student") StudentForm form, BindingResult bindingResult) {
+    public String processForm(@Valid @ModelAttribute("teacher") TeacherForm form, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getModel());
-            return "student/form";
+            return "teacher/form";
         }
-        studentService.saveOrUpdate(new Student(form));
-        return "redirect:/#student";
+        teacherService.saveOrUpdate(form);
+        return "redirect:/#teacher";
     }
     
     @GetMapping("/{id}/delete")
     public String deleteStudent(@PathVariable("id") Long id) {
-        studentService.delete(id);
-        return "redirect:/#student";
+        teacherService.delete(id);
+        return "redirect:/#teacher";
     }
     
     @GetMapping("/{id}/update")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        Student student = studentService.getStudentById(id);
-        model.addAttribute("student", new StudentForm(student));
-        return "student/form";
+        Teacher teacher = teacherService.getTeacherById(id);
+        model.addAttribute("teacher", new TeacherForm(teacher));
+        return "teacher/form";
     }
     
 }

@@ -1,6 +1,7 @@
-package com.jungtin.entity;
+package com.jungtin.entity.form;
 
 
+import com.jungtin.entity.Student;
 import java.time.format.DateTimeFormatter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
