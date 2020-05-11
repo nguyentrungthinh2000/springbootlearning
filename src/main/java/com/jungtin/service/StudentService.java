@@ -42,17 +42,36 @@ public class StudentService {
     }
     
     public Student saveOrUpdate(Student student) {
-        SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource)
-            .withTableName("STUDENT")
-            .usingGeneratedKeyColumns("ID");
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("ID", student.getId());
-        params.put("NAME", student.getName());
-        params.put("BIRTHDATE", student.getBirthdate());
-
-        Number returnedId = insert.executeAndReturnKey(params);
-        student.setId(returnedId.longValue());
+        if(student.getId() == null) {
+            /*
+            *   CREATING
+            * */
+            SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource)
+                .withTableName("STUDENT")
+                .usingGeneratedKeyColumns("ID");
+    
+            Map<String, Object> params = new HashMap<>();
+            params.put("ID", student.getId());
+            params.put("NAME", student.getName());
+            params.put("BIRTHDATE", student.getBirthdate());
+    
+            Number returnedId = insert.executeAndReturnKey(params);
+            student.setId(returnedId.longValue());
+        } else {
+            /*
+            *   UPDATING
+            * */
+            final int rs = jdbcTemplate
+                .update("UPDATE student SET name = ?, birthdate = ? WHERE id = ?",
+                    new Object[]{
+                        student.getName(),
+                        student.getBirthdate(),
+                        student.getId(),
+                    });
+    
+            if(rs <= 0)
+                student = null;
+        }
     
         return student;
     }

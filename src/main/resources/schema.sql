@@ -4,10 +4,10 @@
     birthdate DATE NULL
 );*/
 
-DROP TABLE student;
+DROP TABLE IF EXISTS student;
 
 CREATE TABLE IF NOT EXISTS student(
-    id int unsigned NOT NULL AUTO_INCREMENT,
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     birthdate DATE NULL,
 
